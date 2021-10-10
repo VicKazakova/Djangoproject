@@ -16,13 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from users.views import login, register, logout, profile
+from basket.views import basket_add, basket_remove
 
-app_name = 'users'
+app_name = 'basket'
 
 urlpatterns = [
-    path('login/', login, name='login'),
-    path('register/', register, name='register'),
-    path('logout/', logout, name='logout'),
-    path('profile/', profile, name='profile'),
+    path('basket_add/<int:id>', basket_add, name='basket_add'),
+    path('basket_remove/<int:id>', basket_remove, name='basket_remove'),
 ]
