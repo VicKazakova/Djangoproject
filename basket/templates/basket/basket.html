@@ -15,18 +15,33 @@
                         <p style="width: 200px; float: right" class="card-text">{{ basket.product.description }}</p>
                     </div>
                 </div>
+                <div class="text-center" style="background-color: lightgrey; height: 30px; justify-content: left">
+                    <div style="font-size: 13px; display: inline-block; width: 20%">Кол-во</div>
+                    <div style="font-size: 13px; display: inline-block; width: 30%">Цена за шт.</div>
+                    <div style="font-size: 13px; display: inline-block; width: 30%">Цена за {{ basket.quantity }} шт.
+                    </div>
+                    <div style="font-size: 13px; display: inline-block; width: 10%"></div>
+                </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item bg-light">
                         <div class="row text-center">
-                            <div class="col-lg-4">
-                                <input name="{{ basket.id }}" type="number" class="form-control"
-                                       value="{{ basket.quantity }}" min="1">
-                            </div>
-                            <div class="col-lg-4">{{ basket.sum }} руб.</div>
-                            <div class="col-lg-4">
-                                <a href="{% url 'basket:basket_remove' basket.id %}">
-                                    <i class="fas fa-trash"></i>
-                                </a>
+                            <div style="justify-content: space-between">
+                                <div style="display: inline-block; width: 20%" class="col-lg-4">
+                                    <input style="font-size: 12px" name="{{ basket.id }}" type="number"
+                                           class="form-control"
+                                           value="{{ basket.quantity }}" min="1">
+                                </div>
+                                <div style="font-size: 13px; display: inline-block; width: 30%"> {{ basket.product.price }}
+                                    руб.
+                                </div>
+                                <div style="font-size: 13px; display: inline-block; width: 30%"
+                                     class="col-lg-4">{{ basket.sum }} руб.
+                                </div>
+                                <div style="display: inline-block; width: 10%" class="col-lg-4">
+                                    <a href="{% url 'basket:basket_remove' basket.id %}">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </li>

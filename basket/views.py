@@ -29,14 +29,23 @@ def basket_remove(request, id):
 
 @login_required
 def basket_edit(request, id, quantity):
+    final_sum = 0
+    final_quantity = 0
+    baskets = Basket.objects.filter(user=request.user)
     if request.is_ajax():
         basket = Basket.objects.get(id=id)
         if quantity > 0:
             basket.quantity = quantity
             basket.save()
+            for basket in baskets:
+                final_sum += basket.sum()
+                final_quantity += basket.quantity
+                basket.save()
         else:
             basket.delete()
         baskets = Basket.objects.filter(user=request.user)
-        context = {'baskets': baskets}
+        context = {'baskets': baskets,
+                   'final_quantity': final_quantity,
+                   'final_sum': final_sum}
         result = render_to_string('basket/basket.html', context)
         return JsonResponse({'result': result})
