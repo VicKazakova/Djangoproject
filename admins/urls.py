@@ -16,12 +16,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-# from basket.views import basket_add, basket_remove, basket_edit
+from .views import index, admin_users, admin_users_delete, admin_users_update, admin_users_create, \
+    admin_products, admin_category, admin_category_create, admin_products_create, \
+    admin_products_update, admin_products_delete, admin_category_update, admin_category_delete
 
 app_name = 'admins'
 
 urlpatterns = [
-    # path('basket_add/<int:id>', basket_add, name='basket_add'),
-    # path('basket_remove/<int:id>', basket_remove, name='basket_remove'),
-    # path('basket_edit/<int:id>/<int:quantity>/', basket_edit, name='basket_edit'),
+    path('', index, name='index'),
+    path('admin_users/', admin_users, name='admin_users'),
+    path('admin_users_delete/<int:id>/', admin_users_delete, name='admin_users_delete'),
+    path('admin_users_update/<int:id>/', admin_users_update, name='admin_users_update'),
+    path('admin_users_create/', admin_users_create, name='admin_users_create'),
+    path('admin_products/', admin_products, name='admin_products'),
+    path('admin_category/', admin_category, name='admin_category'),
+    path('admin_category_create/', admin_category_create, name='admin_category_create'),
+    path('admin_products_create/', admin_products_create, name='admin_products_create'),
+    path('admin_products_update/<int:id>/', admin_products_update, name='admin_products_update'),
+    path('admin_products_delete/<int:id>/', admin_products_delete, name='admin_products_delete'),
+    path('admin_category_update/<int:id>/', admin_category_update, name='admin_category_update'),
+    path('admin_category_delete/<int:id>/', admin_category_delete, name='admin_category_delete'),
 ]
