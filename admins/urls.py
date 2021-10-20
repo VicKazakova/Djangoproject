@@ -16,24 +16,29 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import index, admin_users, admin_users_delete, admin_users_update, admin_users_create, \
-    admin_products, admin_category, admin_category_create, admin_products_create, \
-    admin_products_update, admin_products_delete, admin_category_update, admin_category_delete
+from .views import index,\
+    UserListView, ProductsListView, CategoryListView, UserCreateView, ProductsCreateView, CategoryCreateView, \
+    UserUpdateView, ProductUpdateView, CategoryUpdateView, UserDeleteView, ProductsDeleteView, CategoryDeleteView, \
+    BasketListView, BasketCreateView, BasketUpdateView, BasketDeleteView
 
 app_name = 'admins'
 
 urlpatterns = [
     path('', index, name='index'),
-    path('admin_users/', admin_users, name='admin_users'),
-    path('admin_users_delete/<int:id>/', admin_users_delete, name='admin_users_delete'),
-    path('admin_users_update/<int:id>/', admin_users_update, name='admin_users_update'),
-    path('admin_users_create/', admin_users_create, name='admin_users_create'),
-    path('admin_products/', admin_products, name='admin_products'),
-    path('admin_category/', admin_category, name='admin_category'),
-    path('admin_category_create/', admin_category_create, name='admin_category_create'),
-    path('admin_products_create/', admin_products_create, name='admin_products_create'),
-    path('admin_products_update/<int:id>/', admin_products_update, name='admin_products_update'),
-    path('admin_products_delete/<int:id>/', admin_products_delete, name='admin_products_delete'),
-    path('admin_category_update/<int:id>/', admin_category_update, name='admin_category_update'),
-    path('admin_category_delete/<int:id>/', admin_category_delete, name='admin_category_delete'),
+    path('admin_users/', UserListView.as_view(), name='admin_users'),
+    path('admin_users_delete/<int:pk>/', UserDeleteView.as_view(), name='admin_users_delete'),
+    path('admin_users_update/<int:pk>/', UserUpdateView.as_view(), name='admin_users_update'),
+    path('admin_users_create/', UserCreateView.as_view(), name='admin_users_create'),
+    path('admin_products/', ProductsListView.as_view(), name='admin_products'),
+    path('admin_category/', CategoryListView.as_view(), name='admin_category'),
+    path('admin_category_create/', CategoryCreateView.as_view(), name='admin_category_create'),
+    path('admin_products_create/', ProductsCreateView.as_view(), name='admin_products_create'),
+    path('admin_products_update/<int:pk>/', ProductUpdateView.as_view(), name='admin_products_update'),
+    path('admin_products_delete/<int:pk>/', ProductsDeleteView.as_view(), name='admin_products_delete'),
+    path('admin_category_update/<int:pk>/', CategoryUpdateView.as_view(), name='admin_category_update'),
+    path('admin_category_delete/<int:pk>/', CategoryDeleteView.as_view(), name='admin_category_delete'),
+    path('admin_basket_read/', BasketListView.as_view(), name='admin_basket_read'),
+    path('admin_basket_create/', BasketCreateView.as_view(), name='admin_basket_create'),
+    path('admin_basket_update/<int:pk>/', BasketUpdateView.as_view(), name='admin_basket_update'),
+    path('admin_basket_delete/<int:pk>/', BasketDeleteView.as_view(), name='admin_basket_delete'),
 ]

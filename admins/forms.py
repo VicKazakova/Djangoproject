@@ -3,6 +3,7 @@ from django import forms
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
 from products.models import ProductsCategory, Product
+from basket.models import Basket
 
 
 class UserAdminRegisterForm(UserRegisterForm):
@@ -31,10 +32,10 @@ class UserAdminProductCreateForm(forms.ModelForm):
                                                          'readonly': False}))
     description = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4',
                                                                 'readonly': False}))
-    price = forms.DecimalField(widget=forms.DecimalField())
-    quantity = forms.IntegerField(widget=forms.IntegerField())
+    price = forms.DecimalField(widget=forms.NumberInput())
+    quantity = forms.IntegerField(widget=forms.NumberInput())
     image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
-    category = forms.IntegerField(widget=forms.IntegerField())
+    category = forms.IntegerField(widget=forms.NumberInput())
 
     class Meta:
         model = Product
@@ -57,10 +58,10 @@ class UserAdminProductUpdateForm(UserProfileForm):
                                                          'readonly': False}))
     description = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4',
                                                                 'readonly': False}))
-    price = forms.CharField(widget=forms.FloatField())
-    quantity = forms.IntegerField(widget=forms.IntegerField())
+    price = forms.CharField(widget=forms.NumberInput())
+    quantity = forms.IntegerField(widget=forms.NumberInput())
     image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
-    category = forms.IntegerField(widget=forms.IntegerField())
+    category = forms.IntegerField(widget=forms.NumberInput())
 
     class Meta:
         model = Product
@@ -76,3 +77,19 @@ class UserAdminCategoryUpdateForm(UserProfileForm):
     class Meta:
         model = Product
         fields = ('name', 'description')
+
+
+class UserAdminBasketCreateForm(forms.ModelForm):
+    quantity = forms.IntegerField(widget=forms.NumberInput())
+
+    class Meta:
+        model = Basket
+        fields = ('user', 'product', 'quantity')
+
+
+class UserAdminBasketUpdateForm(forms.ModelForm):
+    quantity = forms.IntegerField(widget=forms.NumberInput())
+
+    class Meta:
+        model = Basket
+        fields = ('user', 'product', 'quantity')

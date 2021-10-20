@@ -1,0 +1,64 @@
+{% extends 'admins/admin_base.html' %}
+
+{% block content %}
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4">{{ title }}</h1>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table mr-1"></i>
+                        {{ title }}
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Имя пользователя</th>
+                                    <th>Продукт</th>
+                                    <th>Кол-во</th>
+                                    <th>Создано</th>
+                                    <th>Изменено</th>
+                                    <th>Активный</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for basket in object_list %}
+                                    <tr>
+                                        <td><a href="{% url 'admins:admin_basket_update' basket.id %}"
+                                               style="color: dodgerblue">{{ basket.user }}</a>
+                                        </td>
+                                        <td>{{ basket.product }}</td>
+                                        <td>{{ basket.quantity }}</td>
+                                        <td>{{ basket.created_timestamp }}</td>
+                                        <td>{{ basket.updated_timestamp }}</td>
+                                        {% if basket.is_active %}
+                                            <td class="text-center"><i class="fas fa-check-circle"></i></td>
+                                        {% else %}
+                                            <td class="text-center" style="background-color: darkgrey"><i
+                                                    class="fas fa-times-circle"></i></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'admins:admin_basket_create' %}">
+                            <button class="btn btn-success">Создать корзину</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+{% endblock %}
