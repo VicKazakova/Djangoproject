@@ -4,7 +4,7 @@ import hashlib
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 
-from users.models import User
+from users.models import User, UserProfile
 
 
 class UserProfileForm(UserChangeForm):
@@ -13,7 +13,7 @@ class UserProfileForm(UserChangeForm):
     image = forms.ImageField(widget=forms.FileInput(), required=False)
     username = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'readonly': True}))
-    age = forms.IntegerField(widget=forms.NumberInput(attrs={'readonly': True}), required=False)
+    age = forms.IntegerField(widget=forms.NumberInput(), required=False)
 
     class Meta:
         model = User
@@ -55,7 +55,7 @@ class UserRegisterForm(UserCreationForm):
     last_name = forms.CharField(widget=forms.TextInput())
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
-    age = forms.IntegerField(widget=forms.NumberInput(), required=False)
+    age = forms.IntegerField(widget=forms.NumberInput())
 
     class Meta:
         model = User
@@ -94,3 +94,19 @@ class UserRegisterForm(UserCreationForm):
         user.activation_key = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
         user.save()
         return user
+
+
+class UserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('tagline', 'gender', 'about_me', 'image_profile', 'age')
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileEditForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name != 'gender' and field_name != 'image_profile':
+                field.widget.attrs['class'] = 'form-control py-4'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+        self.fields['image_profile'].widget.attrs['class'] = 'custom-file-input'
+
