@@ -5,7 +5,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
 from django.urls import reverse
 
-from .forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from .forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 from basket.models import Basket
 
 # Create your views here.
@@ -56,12 +56,14 @@ def profile(request):
     baskets = Basket.objects.filter(user=request.user)
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
-        if form.is_valid():
+        profile_form = UserProfileEditForm(data=request.POST, instance=request.user.userprofile)
+        if form.is_valid() and profile_form.is_valid():
             form.save()
             messages.success(request, "Your data changed successfully!")
             return HttpResponseRedirect(reverse('users:profile'))
     else:
         form = UserProfileForm(instance=request.user)
+        profile_form = UserProfileEditForm(instance=request.user.userprofile)
         if baskets:
             for basket in baskets:
                 final_quantity += basket.quantity
@@ -72,6 +74,7 @@ def profile(request):
         'baskets': baskets,
         'final_quantity': final_quantity,
         'final_sum': final_sum,
+        'profile_form': profile_form
     }
     return render(request, 'users/profile.html', context)
 
@@ -92,7 +95,7 @@ def send_verify_link(user):
 def verify(request, email, activation_key):
     try:
         user = User.objects.get(email=email)
-        if user and user.activation_key == activation_key and not user.is_activation_key_expired():
+        if user and user.activation_key == activation_key and not user.if_activation_key_expired():
             user.activation_key = ''
             user.activation_key_expires = None
             user.is_active = True
@@ -100,4 +103,5 @@ def verify(request, email, activation_key):
             auth.login(request, user)
         return render(request, 'users/verification.html')
     except Exception as e:
+        # print(e)
         return HttpResponseRedirect(reverse('index'))
