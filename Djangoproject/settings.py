@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'basket',
     'admins',
     'social_django',
+    'ordersapp',
 ]
 
 MIDDLEWARE = [
@@ -57,13 +58,15 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
+SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+
 ROOT_URLCONF = 'Djangoproject.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [os.path.join(SETTINGS_PATH, 'templates')],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

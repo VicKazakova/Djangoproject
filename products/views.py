@@ -1,20 +1,51 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView, DetailView
 
 from products.models import Product, ProductsCategory
-import os
-import json
+
+
+# import os
+# import json
 
 
 # MODULE_DIR = os.path.dirname(__file__)
-
-# Create your views here.
-
 
 def index(request):
     context = {'title': 'geekshop'}
     return render(request, 'index.html', context)
 
+
+class ProductView(ListView):
+    model = Product
+    template_name = 'products.html'
+
+    def get_queryset(self, id=None):
+        return Product.objects.filter(category_id=id) if id is not None else Product.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductView, self).get_context_data(**kwargs)
+        context['title'] = 'Geekshop -- Products'
+        return context
+
+
+class ProductCategoryView(ListView):
+    model = ProductsCategory
+    template_name = 'products.html'
+
+    def get_queryset(self):
+        return ProductsCategory.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCategoryView, self).get_context_data(**kwargs)
+        context['title'] = 'Geekshop -- Products'
+        return context
+
+# def dispatch(self, request, *args, **kwargs):
+#     return super(ProductView, self).dispatch(request, *args, **kwargs)
+#
+# def get_queryset(self, id=None):
+#     return Product.objects.all()
 
 def products(request, id=None, page=1):
     products = Product.objects.filter(category_id=id) if id is not None else Product.objects.all()
@@ -30,20 +61,12 @@ def products(request, id=None, page=1):
     return render(request, 'products.html', context)
 
 
-def test(request):
-    context = {
-        'title': 'geekshop',
-        'user': 'Petrov',
-        'description': 'Welcome!',
-        'products': [
-            {'name': 'Худи черного цвета с монограммами adidas Originals', 'price': '6 090,00'},
-            {'name': 'Синяя куртка The North Face', 'price': '23 725,00'},
-            {'name': 'Коричневый спортивный oversized-топ ASOS DESIGN', 'price': '3 390,00'},
-        ],
-        'promotion': True,
-        'products_of_promotion': [
-            {'name': 'Худи черного цвета с монограммами adidas Originals', 'price': '6 090,00'},
-            {'name': 'Синяя куртка The North Face', 'price': '23 725,00'},
-        ]
-    }
-    return render(request, 'test.html', context)
+class ProductDetail(DetailView):
+    model = Product
+    template_name = 'product_detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, category_id=None, *args, **kwargs):
+        context = super().get_context_data()
+        context['categories'] = ProductsCategory.objects.all()
+        return context

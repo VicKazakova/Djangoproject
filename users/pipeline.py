@@ -15,7 +15,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
 
     api_url = urlunparse(('https', 'api.vk.com', '/method/users.get', None,
                           urlencode(OrderedDict(fields=','.join(('bdate', 'sex', 'about',
-                                                                 'photo_50', 'screen_name')),
+                                                                 'photo_200', 'screen_name')),
                                                 access_token=response['access_token'],
                                                 v='5.131')),
                           None))
@@ -31,8 +31,13 @@ def save_user_profile(backend, user, response, *args, **kwargs):
     else:
         page_url = f"https://vk.com/{data['screen_name']}"
         user.userprofile.about_me = page_url
-    if data['photo_50']:
-        user.userprofile.image_profile = data['photo_50']
+    if data['photo_200']:
+        photo_link = data['photo_200']
+        photo_response = requests.get(photo_link)
+        path_photo = f'users_image{user.pk}.jpg'
+        with open(f'media/{path_photo}', 'wb') as photo:
+            photo.write(photo_response.content)
+        user.image = path_photo
     bdate = datetime.strptime(data['bdate'], '%d.%m.%Y').date()
     age = timezone.now().date().year - bdate.year
     user.userprofile.age = age
